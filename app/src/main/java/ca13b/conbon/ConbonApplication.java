@@ -19,12 +19,18 @@ package ca13b.conbon;
 
 import android.app.Application;
 
+import ca13b.conbon.model.User;
 import io.realm.Realm;
 
 public class ConbonApplication extends Application {
+
+    public static User currentUser;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
+
+        currentUser = new User();
     }
 }

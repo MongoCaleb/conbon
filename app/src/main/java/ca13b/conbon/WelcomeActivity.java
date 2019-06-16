@@ -19,6 +19,7 @@ package ca13b.conbon;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +27,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
+import ca13b.conbon.model.User;
 import io.realm.ObjectServerError;
 import io.realm.Realm;
 import io.realm.SyncConfiguration;
@@ -39,7 +42,10 @@ import static ca13b.conbon.Constants.AUTH_URL;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private EditText nicknameView;
+    private EditText nameView;
+    private EditText passwordView;
+    private EditText orgView;
+    private CheckBox isNewUser;
     private View progressView;
     private View loginFormView;
 
@@ -49,11 +55,15 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         if (SyncUser.current() != null) {
-            setUpRealmAndGoToTaskListActivity();
+            SyncUser.current().logOut();
+            //setUpRealmAndGoToTaskListActivity();
         }
 
         // Set up the login form.
-        nicknameView = findViewById(R.id.nickname);
+        nameView = findViewById(R.id.name);
+        passwordView = findViewById(R.id.password);
+        orgView = findViewById(R.id.org);
+        isNewUser = findViewById(R.id.chkNewUser);
         Button loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(view -> attemptLogin());
         loginFormView = findViewById(R.id.login_form);
@@ -62,24 +72,30 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         // Reset errors.
-        nicknameView.setError(null);
+        nameView.setError(null);
+        passwordView.setError(null);
         // Store values at the time of the login attempt.
-        String nickname = nicknameView.getText().toString();
+        String name = nameView.getText().toString();
+        String password = passwordView.getText().toString();
+        String org = orgView.getText().toString();
         showProgress(true);
 
-        SyncCredentials credentials = SyncCredentials.nickname(nickname, true);
+        SyncCredentials credentials = SyncCredentials.usernamePassword(name, password, isNewUser.isChecked());
         SyncUser.logInAsync(credentials, AUTH_URL, new SyncUser.Callback<SyncUser>() {
             @Override
             public void onSuccess(SyncUser user) {
                 showProgress(false);
                 setUpRealmAndGoToTaskListActivity();
+                ConbonApplication.currentUser = new User();
+                ConbonApplication.currentUser.setName(name);
+                ConbonApplication.currentUser.setOrg(org);
             }
 
             @Override
             public void onError(ObjectServerError error) {
                 showProgress(false);
-                nicknameView.setError("Uh oh something went wrong! (check your logcat please)");
-                nicknameView.requestFocus();
+                nameView.setError("Uh oh something went wrong! (check your logcat please)");
+                nameView.requestFocus();
                 Log.e("Login error", error.toString());
             }
         });

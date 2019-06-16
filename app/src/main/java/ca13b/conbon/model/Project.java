@@ -45,7 +45,6 @@ public class Project extends RealmObject {
     public String getId() {
         return projectId;
     }
-
     public void setId(String id) {
         this.projectId = id;
     }
@@ -53,9 +52,15 @@ public class Project extends RealmObject {
     public String getOwner() {
         return owner;
     }
-
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getOrg() {
+        return org;
+    }
+    public void setOrg(String owner) {
+        this.org = org;
     }
 
     public String getName() {

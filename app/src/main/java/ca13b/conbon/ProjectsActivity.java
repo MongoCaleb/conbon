@@ -66,20 +66,28 @@ public class ProjectsActivity extends AppCompatActivity {
                         project.setId(UUID.randomUUID().toString());
                         project.setOwner(userId);
                         project.setName(name);
+                        project.setOrg(ConbonApplication.currentUser.getOrg());
                         project.setTimestamp(new Date());
-
                         realm.insert(project);
+
                     }, error -> RealmLog.error(error) ))
                     .setNegativeButton("Cancel", null)
                     .create()
                     .show();
         });
 
-        // Create a  subscription that only download the  users projects from the server.
         realm = Realm.getDefaultInstance();
+
+        //add the User object, which contains additional metadata about the user
+        realm.executeTransactionAsync(realm -> {
+            ConbonApplication.currentUser.setSyncUserId(SyncUser.current().getIdentity());
+            realm.insertOrUpdate(ConbonApplication.currentUser);
+        }, error -> RealmLog.error(error) );
+
+        // Create a  subscription that only download the org's projects from the server.
         RealmResults<Project> projects = realm
                 .where(Project.class)
-                .equalTo("owner", SyncUser.current().getIdentity())
+                .equalTo("org", ConbonApplication.currentUser.getOrg())
                 .sort("timestamp", Sort.DESCENDING)
                 .findAllAsync();
 
