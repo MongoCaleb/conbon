@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.realm.todo">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,25 +11,26 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Platform.MaterialComponents"
+        tools:replace="android:appComponentFactory"
+        android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
         <activity
             android:name="ca13b.conbon.WelcomeActivity"
             android:label="@string/app_name"
-            android:noHistory="true">
+            android:noHistory="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="ca13b.conbon.TasksActivity"
             android:label="@string/title_activity_items"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents" />
         <activity
             android:name="ca13b.conbon.ProjectsActivity"
             android:label="@string/title_select_projects"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

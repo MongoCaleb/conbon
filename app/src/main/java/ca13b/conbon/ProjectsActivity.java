@@ -18,16 +18,17 @@ package ca13b.conbon;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Date;
 import java.util.UUID;
@@ -49,7 +50,7 @@ public class ProjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-        setSupportActionBar(findViewById(R.id.toolbar));
+        //setSupportActionBar(findViewById(R.id.toolbar));
 
         findViewById(R.id.fab).setOnClickListener(view -> {
             View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_task, null);
@@ -85,6 +86,7 @@ public class ProjectsActivity extends AppCompatActivity {
         }, error -> RealmLog.error(error) );
 
         // Create a  subscription that only download the org's projects from the server.
+
         RealmResults<Project> projects = realm
                 .where(Project.class)
                 .equalTo("org", ConbonApplication.currentUser.getOrg())

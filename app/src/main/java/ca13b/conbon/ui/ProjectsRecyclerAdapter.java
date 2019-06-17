@@ -19,16 +19,19 @@ package ca13b.conbon.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import ca13b.conbon.TasksActivity;
 import ca13b.conbon.model.Project;
+import io.realm.todo.R;
 
 public class ProjectsRecyclerAdapter extends RealmRecyclerViewAdapter<Project, ProjectsRecyclerAdapter.MyViewHolder> {
     private final Context context;
@@ -41,7 +44,7 @@ public class ProjectsRecyclerAdapter extends RealmRecyclerViewAdapter<Project, P
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
+                .inflate(R.layout.projects_list_view, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -49,8 +52,9 @@ public class ProjectsRecyclerAdapter extends RealmRecyclerViewAdapter<Project, P
     public void onBindViewHolder(MyViewHolder holder, int position)  {
         final Project project = getItem(position);
         if (project != null) {
-            holder.textView.setText(project.getName());
-            holder.textView.setOnClickListener(v -> {
+            holder.tvTitle.setText(project.getName());
+            holder.tvBody.setText(String.valueOf(project.getTasks().size()) + " task(s) in this project");
+            holder.taskCard.setOnClickListener(v -> {
                 Intent intent = new Intent(context, TasksActivity.class);
                 intent.putExtra(TasksActivity.INTENT_EXTRA_PROJECT_ID, project.getId());
                 context.startActivity(intent);
@@ -59,11 +63,15 @@ public class ProjectsRecyclerAdapter extends RealmRecyclerViewAdapter<Project, P
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView tvTitle;
+        TextView tvBody;
+        CardView taskCard;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(android.R.id.text1);
+            tvTitle = itemView.findViewById(android.R.id.text1);
+            tvBody = itemView.findViewById(android.R.id.text2);
+            taskCard = itemView.findViewById(R.id.taskCard);
         }
     }
 }

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">ToDo</string>
+    <string name="app_name">Conbon</string>
     <string name="action_settings">Logout</string>
-    <string name="title_activity_items">Things ToDo!</string>
+    <string name="title_activity_items">Things To Do!</string>
     <string name="title_select_projects">My Projects</string>
 
     <!-- Strings related to login -->
