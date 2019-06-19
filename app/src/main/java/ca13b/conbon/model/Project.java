@@ -59,7 +59,7 @@ public class Project extends RealmObject {
     public String getOrg() {
         return org;
     }
-    public void setOrg(String owner) {
+    public void setOrg(String org) {
         this.org = org;
     }
 
